@@ -80,10 +80,12 @@ def mongo_version_manager():
     versions_tobe_deleted = [val for sublist in a33 for val in sublist]
     print versions_tobe_deleted
 
-    final_tobe_deleted_versions = [element for element in versions_tobe_deleted if
-                                   element not in versions_not_to_be_deleted]
-    print final_tobe_deleted_versions
-    db.modulestore.structures.remove({'_id': {'$in': final_tobe_deleted_versions}})
+    final_to_be_deleted_versions = []
+    for element in versions_tobe_deleted:
+        if element not in versions_not_to_be_deleted:
+            final_to_be_deleted_versions.append(element)
+    print final_to_be_deleted_versions
+    db.modulestore.structures.remove({'_id': {'$in': final_to_be_deleted_versions}})
 
 
 a = mongo_version_manager()
