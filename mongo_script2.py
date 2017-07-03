@@ -31,7 +31,6 @@ def search_dictionaries(key, value, list_of_dictionaries):
 
 
 for each in available_version_list_with_prev_original:
-    # while each["previous_version"] not in list_of_avail_id and each["previous_version"] != None:
     if each["previous_version"] is None:
         print "Hi None"
     elif each["previous_version"] not in list_of_avail_id and each["previous_version"] is not None:
