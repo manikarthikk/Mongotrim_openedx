@@ -92,4 +92,4 @@ def mongo_version_manager():
     db.modulestore.structures.remove({'_id': {'$in': final_to_be_deleted_versions}})
 
 
-a = mongo_version_manager()
+mongo_version_manager()
