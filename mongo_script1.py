@@ -37,8 +37,8 @@ all_req_versions = []
 for version in all_required_versions:
     if version is not None:
         all_req_versions.append(version)
-print "********** ***********all required versions ********* *****************************"
-print all_req_versions
+#print "********** ***********all required versions ********* *****************************"
+#print all_req_versions
 
 
 def search_dictionaries(key, val, list_of_dictionaries):
@@ -77,18 +77,18 @@ def mongo_version_manager():
             a22.append(req_sub_tree[-1])
             a33.append(req_sub_tree[2:-1])
     versions_not_to_be_deleted = [val for sub_list in a11 for val in sub_list] + a22 + all_req_versions + a11
-    print versions_not_to_be_deleted
+    #print versions_not_to_be_deleted
     versions_tobe_deleted = []
     for sub_list in a33:
         for val in sub_list:
             versions_tobe_deleted.append(val)
-    print versions_tobe_deleted
+    #print versions_tobe_deleted
 
     final_to_be_deleted_versions = []
     for element in versions_tobe_deleted:
         if element not in versions_not_to_be_deleted:
             final_to_be_deleted_versions.append(element)
-    print final_to_be_deleted_versions
+    #print final_to_be_deleted_versions
     db.modulestore.structures.remove({'_id': {'$in': final_to_be_deleted_versions}})
 
 
