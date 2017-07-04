@@ -64,18 +64,19 @@ def mongo_version_manager():
                 i += 1
             all_versions_tree_list.append(version_tree)
     print all_versions_tree_list
-    req_sub_tree = []
+    #req_sub_tree = []
     a11 = []
     a22 = []
     a33 = []
     for each_tree in all_versions_tree_list:
+        req_sub_tree = []
         for item in each_tree:
             req_sub_tree.append(item['_id'])
         if len(req_sub_tree) > 3:
             a11.append(req_sub_tree[:2])
             a22.append(req_sub_tree[-1])
             a33.append(req_sub_tree[2:-1])
-    versions_not_to_be_deleted = [val for sub_list in a11 for val in sub_list] + a22 + all_req_versions
+    versions_not_to_be_deleted = [val for sub_list in a11 for val in sub_list] + a22 + all_req_versions + a11
     print versions_not_to_be_deleted
     versions_tobe_deleted = []
     for sub_list in a33:
