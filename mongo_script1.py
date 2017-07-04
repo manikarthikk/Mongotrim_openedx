@@ -72,7 +72,7 @@ def mongo_version_manager():
         req_sub_tree = []
         for item in each_tree:
             req_sub_tree.append(item['_id'])
-        if len(req_sub_tree) > 3:
+        if len(req_sub_tree) > 2:
             a11.append(req_sub_tree[:2])
             a22.append(req_sub_tree[-1])
             a33.append(req_sub_tree[2:-1])
