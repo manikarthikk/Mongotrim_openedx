@@ -73,13 +73,17 @@ def mongo_version_manager():
         for item in each_tree:
             req_sub_tree.append(item['_id'])
         if len(req_sub_tree) > 2:
+            # This will extract the first n version id's from the version_tree
             head_nodes.append(req_sub_tree[:2])
+            # This will extract the last n version id's from the version_tree
             middle_nodes.append(req_sub_tree[-1])
+            # This will extract the mid range of n t0 n+1 version id's from the version_tree
             tail_nodes.append(req_sub_tree[2:-1])
     versions_not_to_be_deleted = [val for sub_list in head_nodes for val in sub_list] + middle_nodes + all_req_versions + head_nodes
     #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
     for each in versions_not_to_be_deleted:
+        #removing duplicated in versions_not_to_be_deleted list 
         if each not in versions_not_to_be_deleted_2:
             versions_not_to_be_deleted_2.append(each)
 
@@ -94,6 +98,7 @@ def mongo_version_manager():
         if element not in versions_not_to_be_deleted_2:
             final_to_be_deleted_versions.append(element)
     #print final_to_be_deleted_versions
+    #this will delete all the extra or unnecessary versions
     db.modulestore.structures.remove({'_id': {'$in': final_to_be_deleted_versions}})
 
 
