@@ -76,7 +76,7 @@ def mongo_version_manager():
             head_nodes.append(req_sub_tree[:2])
             middle_nodes.append(req_sub_tree[-1])
             tail_nodes.append(req_sub_tree[2:-1])
-    versions_not_to_be_deleted = [val for sub_list in a11 for val in sub_list] + middle_nodes + all_req_versions + head_nodes
+    versions_not_to_be_deleted = [val for sub_list in head_nodes for val in sub_list] + middle_nodes + all_req_versions + head_nodes
     #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
     for each in versions_not_to_be_deleted:
