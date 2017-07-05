@@ -3,13 +3,12 @@ from pymongo import MongoClient
 client = MongoClient()
 
 db = client.edxapp
-
-collection = db.modulestore.active_versions
+#collection = db.modulestore.active_versions
 required_version_list = []
 versions_not_to_be_deleted = 0
 available_version_list = []
 available_version_list_with_prev_original = []
-for value in collection.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1, "versions.library": 1, }):
+for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1, "versions.library": 1, }):
     required_version_list.append(value)
 versions = [d['versions'] for d in required_version_list]
 for value in versions:
