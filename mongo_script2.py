@@ -4,7 +4,6 @@ client = MongoClient()
 
 db = client.edxapp
 
-collection = db.modulestore.structures
 available_version_list_with_prev_original = []
 
 available_version_list_with_id_val = []
