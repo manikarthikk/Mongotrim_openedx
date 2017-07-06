@@ -67,7 +67,8 @@ for version_dict in versions:
 all_required_versions = draft_branch_version + published_branch_version + library_branch_version
 all_req_versions = []
 for version in all_required_versions:
-    if version is not None: 
+    if version is not None:
+        """ removing the values that says None from the all_req_versions """
         all_req_versions.append(version)
 #print "********** ***********all required versions **************************************"
 #print all_req_versions
