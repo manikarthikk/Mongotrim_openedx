@@ -12,22 +12,26 @@ versions_not_to_be_deleted = 0
 available_version_list = []
 available_version_list_with_prev_original = []
 for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1, "versions.library": 1, }):
-    """ This will extract all the draft,published,library versions of all courses from modulestore.active_versions collection and append
-         to list. The example below shows only the first element in that list.
-         Example: 
+    """ 
+    This will extract all the draft,published,library versions of all courses from modulestore.active_versions collection and append
+    to list. The example below shows only the first element in that list.
+    Example: 
          [{u'_id': ObjectId('595d2a6a06aec009c3949d42'), u'versions': {u'draft-branch': ObjectId('595d56cb06aec009b0949d45'), u'published-branch': ObjectId('595d56cb06aec009b0949d44')}}]
     """
+    
     required_version_list.append(value)
 versions = [d['versions'] for d in required_version_list]
 # Extracting the child documents of u'versions' and storing into versions list
 for value in versions:
     """ we are adding default value for library,draft-branch,published-branch, if doesn't exist in the versions list """ 
+    
     if u'library' not in value:
         value.update({u'library': None})
     elif u'draft-branch' not in value:
         value.update({u'draft-branch': None})
         value.update({u'published-branch': None})
 for j in db.modulestore.structures.find({}, {"previous_version": 1}):
+    
     """ This will give the list of Dictionary's containg _id and previous_version """
     available_version_list.append(j)
 available_version_list_with_prev_original = []
@@ -39,7 +43,7 @@ for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_ve
 
 for j in db.modulestore.structures.find({}, {"_id": 1}):
     available_version_list_with_id_val.append(j)
-# print available_version_listwith_id_val
+""" print available_version_listwith_id_val  """
 list_of_avail_id = []
 for d in available_version_list_with_id_val:
     if '_id' in d:
@@ -48,6 +52,7 @@ for d in available_version_list_with_id_val:
     
 for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
     """ Extracting the list of Dictionary's containg _id ,previous_version and original_version """
+    
     available_version_list_with_prev_original.append(j)
 
 draft_branch_version = []
@@ -69,6 +74,7 @@ all_req_versions = []
 for version in all_required_versions:
     if version is not None:
         """ removing the values that says None from the all_req_versions """
+        
         all_req_versions.append(version)
 #print "********** ***********all required versions **************************************"
 #print all_req_versions
@@ -76,6 +82,7 @@ for version in all_required_versions:
 
 def search_dictionaries(key, val, list_of_dictionaries):
     """ This will take key ,value, list of dictionary's as arguments and returns the dictionary that contains them """  
+    
     for element in list_of_dictionaries:
         if element[key] == val:
             return element
