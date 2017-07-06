@@ -141,8 +141,8 @@ def mongo_verion_linker():
             print "Hi None"
         elif each["previous_version"] not in list_of_avail_id and each["previous_version"] is not None:
             to_be_linked_version_id = []
-            = []
-            c = []
+            b= []
+            original_version_id = []
             to_be_linked_version_id.append(each['_id'])
             #b.append(each['previous_version'])
             original_version_id.append(each['original_version'])
