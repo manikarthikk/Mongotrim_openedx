@@ -35,16 +35,17 @@ def mongo_verion_linker():
         if each["previous_version"] is None:
             print "Hi None"
         elif each["previous_version"] not in list_of_avail_id and each["previous_version"] is not None:
-            a = []
-            b = []
+            to_be_linked_version_id = []
+            = []
             c = []
-            a.append(each['_id'])
-            b.append(each['previous_version'])
-            c.append(each['original_version'])
+            to_be_linked_version_id.append(each['_id'])
+            #b.append(each['previous_version'])
+            original_version_id.append(each['original_version'])
             print a
             print b
             print c
-            db.modulestore.structures.update({'_id': {'$in': a}}, {'$set': {"previous_version": c[0]}})
+            # we are appending into the arrray and linking it, Since $in in mongo query is expecting list 
+            db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}}, {'$set': {"previous_version": original_version_id[0]}})
         else:
             print "*"
 
