@@ -146,9 +146,9 @@ def mongo_verion_linker():
             to_be_linked_version_id.append(each['_id'])
             #b.append(each['previous_version'])
             original_version_id.append(each['original_version'])
-            print a
-            print b
-            print c
+            #print a
+            #print b
+            #print c
             # we are appending into the arrray and linking it, Since $in in mongo query is expecting list 
             db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}}, {'$set': {"previous_version": original_version_id[0]}})
         else:
