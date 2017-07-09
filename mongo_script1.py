@@ -35,31 +35,30 @@ def main():
         elif u'draft-branch' not in value:
             value.update({u'draft-branch': None})
             value.update({u'published-branch': None})
-    for j in db.modulestore.structures.find({}, {"previous_version": 1}):
+    for previous_version in db.modulestore.structures.find({}, {"previous_version": 1}):
         """ This will give the list of Dictionary's with _id and previous_version """
-        available_version_list.append(j)
+        available_version_list.append(previous_version)
     available_version_list_with_prev_original = []
 
     available_version_list_with_id_val = []
-    for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
-        available_version_list_with_prev_original.append(j)
+    for previous_and_original_version in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
+        """
+        
+        Extracting the list of Dictionary's with _id ,previous_version and original_version
+        
+        """
+        available_version_list_with_prev_original.append(previous_and_original_version)
         # print j
 
-    for j in db.modulestore.structures.find({}, {"_id": 1}):
-        available_version_list_with_id_val.append(j)
-    """ print available_version_list_with_id_val  """
+    for _id in db.modulestore.structures.find({}, {"_id": 1}):
+        
+        available_version_list_with_id_val.append(_id)
+        
+        """ print available_version_list_with_id_val  """
     list_of_avail_id = []
     for d in available_version_list_with_id_val:
         if '_id' in d:
             list_of_avail_id.append(d['_id'])
-
-    for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
-        """
-        Extracting the list of Dictionary's with _id ,previous_version and original_version
-        """
-
-        available_version_list_with_prev_original.append(j)
-
     draft_branch_version = []
     for version_dict in versions:
         # Extracting all draft branch versions
@@ -89,8 +88,8 @@ def main():
 
 
 def search_dictionaries(key, val, list_of_dictionaries):
-    """ This will take key ,value, list of dictionary's as arguments and returns the dictionary
-        that contains them.
+    """ This will take key ,value, list of dictionary's as arguments and returns the dictionary 
+        that contains them. 
     """
 
     for element in list_of_dictionaries:
