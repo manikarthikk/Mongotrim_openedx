@@ -6,95 +6,100 @@ client = MongoClient()
 db = client.edxapp
 # accessing the edxapp db
 
-# Initializing the empty lists
-required_version_list = []
-versions_not_to_be_deleted = 0
-available_version_list = []
-available_version_list_with_prev_original = []
-for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1,
-                                                      "versions.library": 1, }):
-    """ 
-    This will extract all the draft,published,library versions of all courses from modulestore.active_versions collection and append
-    to list. The example below shows only the first element in that list.
-    Example: 
-         [{u'_id': ObjectId('595d2a6a06aec009c3949d42'), u'versions': {u'draft-branch': ObjectId('595d56cb06aec009b0949d45'), u'published-branch': ObjectId('595d56cb06aec009b0949d44')}}]
-    """
 
-    required_version_list.append(value)
-versions = [d['versions'] for d in required_version_list]
-# Extracting the child documents of u'versions' and storing into versions list
-for value in versions:
-    """ 
-    we are adding default value for library,draft-branch,published-branch, if doesn't exist in the versions list 
-    """
+def main():
+    # Initializing the empty lists
+    required_version_list = []
+    #versions_not_to_be_deleted = 0
+    available_version_list = []
+    #available_version_list_with_prev_original = []
+    for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1,
+                                                          "versions.library": 1, }):
+        """
+        This will extract all the draft,published,library versions of all courses from modulestore.active_versions collection and append
+        to list. The example below shows only the first element in that list.
+        Example:
+             [{u'_id': ObjectId('595d2a6a06aec009c3949d42'), u'versions': {u'draft-branch': ObjectId('595d56cb06aec009b0949d45'), u'published-branch': ObjectId('595d56cb06aec009b0949d44')}}]
+        """
 
-    if u'library' not in value:
-        value.update({u'library': None})
-    elif u'draft-branch' not in value:
-        value.update({u'draft-branch': None})
-        value.update({u'published-branch': None})
-for j in db.modulestore.structures.find({}, {"previous_version": 1}):
-    """ This will give the list of Dictionary's with _id and previous_version """
-    available_version_list.append(j)
-available_version_list_with_prev_original = []
+        required_version_list.append(value)
+    versions = [d['versions'] for d in required_version_list]
+    # Extracting the child documents of u'versions' and storing into versions list
+    for value in versions:
+        """
+        we are adding default value for library,draft-branch,published-branch, if doesn't exist in the versions list
+        """
 
-available_version_list_with_id_val = []
-for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
-    available_version_list_with_prev_original.append(j)
-    # print j
+        if u'library' not in value:
+            value.update({u'library': None})
+        elif u'draft-branch' not in value:
+            value.update({u'draft-branch': None})
+            value.update({u'published-branch': None})
+    for j in db.modulestore.structures.find({}, {"previous_version": 1}):
+        """ This will give the list of Dictionary's with _id and previous_version """
+        available_version_list.append(j)
+    available_version_list_with_prev_original = []
 
-for j in db.modulestore.structures.find({}, {"_id": 1}):
-    available_version_list_with_id_val.append(j)
-""" print available_version_list_with_id_val  """
-list_of_avail_id = []
-for d in available_version_list_with_id_val:
-    if '_id' in d:
-        list_of_avail_id.append(d['_id'])
+    available_version_list_with_id_val = []
+    for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
+        available_version_list_with_prev_original.append(j)
+        # print j
 
-for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
-    """ 
-    Extracting the list of Dictionary's with _id ,previous_version and original_version 
-    """
+    for j in db.modulestore.structures.find({}, {"_id": 1}):
+        available_version_list_with_id_val.append(j)
+    """ print available_version_list_with_id_val  """
+    list_of_avail_id = []
+    for d in available_version_list_with_id_val:
+        if '_id' in d:
+            list_of_avail_id.append(d['_id'])
 
-    available_version_list_with_prev_original.append(j)
+    for j in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
+        """
+        Extracting the list of Dictionary's with _id ,previous_version and original_version
+        """
 
-draft_branch_version = []
-for version_dict in versions:
-    # Extracting all draft branch versions
-    draft_branch_version.append(version_dict['draft-branch'])
-published_branch_version = []
-for version_dict in versions:
-    # Extracting all published-branch versions
-    published_branch_version.append(version_dict['published-branch'])
-library_branch_version = []
-for version_dict in versions:
-    # Extracting all library versions
-    library_branch_version.append(version_dict['library'])
+        available_version_list_with_prev_original.append(j)
 
-# Adding all the available required verions into one single list    
-all_required_versions = draft_branch_version + published_branch_version + library_branch_version
-all_req_versions = []
-for version in all_required_versions:
-    if version is not None:
-        """ removing the values that says None from the all_req_versions """
+    draft_branch_version = []
+    for version_dict in versions:
+        # Extracting all draft branch versions
+        draft_branch_version.append(version_dict['draft-branch'])
+    published_branch_version = []
+    for version_dict in versions:
+        # Extracting all published-branch versions
+        published_branch_version.append(version_dict['published-branch'])
+    library_branch_version = []
+    for version_dict in versions:
+        # Extracting all library versions
+        library_branch_version.append(version_dict['library'])
 
-        all_req_versions.append(version)
+    # Adding all the available required versions into one single list
+    all_required_versions = draft_branch_version + published_branch_version + library_branch_version
+    all_req_versions = []
+    for version in all_required_versions:
+        if version is not None:
+            """ removing the values that says None from the all_req_versions """
+
+            all_req_versions.append(version)
 
 
-# print "********** ***********all required versions **************************************"
-# print all_req_versions
+    # print all_req_versions
+    mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id, 2)
+    mongo_version_manager(all_req_versions, available_version_list)
 
 
 def search_dictionaries(key, val, list_of_dictionaries):
-    """ This will take key ,value, list of dictionary's as arguments and returns the dictionary that contains them """
+    """ This will take key ,value, list of dictionary's as arguments and returns the dictionary
+        that contains them.
+    """
 
     for element in list_of_dictionaries:
         if element[key] == val:
             return element
 
 
-def mongo_version_manager():
-    global versions_not_to_be_deleted
+def mongo_version_manager(all_req_versions, available_version_list, req_start_node=2):
+    #versions_not_to_be_deleted = 0
     all_versions_tree_list = []
     for each_version in all_req_versions:
         var1 = search_dictionaries('_id', each_version, available_version_list)
@@ -118,7 +123,7 @@ def mongo_version_manager():
         req_sub_tree = []
         for item in each_tree:
             req_sub_tree.append(item['_id'])
-        if len(req_sub_tree) > 2:
+        if len(req_sub_tree) > req_start_node:
             # This will extract the first n version id's from the version_tree
             head_nodes.append(req_sub_tree[:2])
             # This will extract the last n version id's from the version_tree
@@ -130,7 +135,7 @@ def mongo_version_manager():
     # print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
     for each in versions_not_to_be_deleted:
-        # removing duplicated in versions_not_to_be_deleted list 
+        # removing duplicated in versions_not_to_be_deleted list
         if each not in versions_not_to_be_deleted_2:
             versions_not_to_be_deleted_2.append(each)
 
@@ -149,27 +154,26 @@ def mongo_version_manager():
     db.modulestore.structures.remove({'_id': {'$in': final_to_be_deleted_versions}})
 
 
-def mongo_version_linker():
-    
+def mongo_version_linker(available_version_list_with_prev_original,list_of_avail_id):
     for each in available_version_list_with_prev_original:
         if each["previous_version"] is None:
             print "Hi None"
         elif each["previous_version"] not in list_of_avail_id and each["previous_version"] is not None:
             to_be_linked_version_id = []
-            b = []
+            #b = []
             original_version_id = []
             to_be_linked_version_id.append(each['_id'])
-            # b.append(each['previous_version'])
+            #b.append(each['previous_version'])
             original_version_id.append(each['original_version'])
             # print a
             # print b
             # print c
-            # we are appending into the array and linking it, Since $in in mongo query is expecting list 
+            # we are appending into the array and linking it, Since $in in mongo query is expecting list
             db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}},
                                              {'$set': {"previous_version": original_version_id[0]}})
         else:
             print "*"
 
 
-mongo_version_manager()
-mongo_version_linker()
+if __name__ == '__main__':
+    main()
