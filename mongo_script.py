@@ -4,15 +4,15 @@ client = MongoClient()
 # Use Mongo Db URI Format MongoClient('mongodb://localhost:27017/'), empty for localhost
 
 db = client.edxapp
-# accessing the edxapp db
+#accessing the edxapp db
 
 
 def main():
     # Initializing the empty lists
     required_version_list = []
-    #versions_not_to_be_deleted = 0
+    # versions_not_to_be_deleted = 0
     available_version_list = []
-    #available_version_list_with_prev_original = []
+    # available_version_list_with_prev_original = []
     for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1,
                                                           "versions.library": 1, }):
         """
@@ -41,20 +41,20 @@ def main():
     available_version_list_with_prev_original = []
 
     available_version_list_with_id_val = []
-    for previous_and_original_version in db.modulestore.structures.find({}, {"previous_version": 1, "original_version": 1}):
+    for previous_and_original_version in db.modulestore.structures.find({},
+                                                                        {"previous_version": 1, "original_version": 1}):
         """
-        
+
         Extracting the list of Dictionary's with _id ,previous_version and original_version
-        
+
         """
         available_version_list_with_prev_original.append(previous_and_original_version)
         # print j
 
     for _id in db.modulestore.structures.find({}, {"_id": 1}):
-        
         available_version_list_with_id_val.append(_id)
-        
-        """ print available_version_list_with_id_val  """
+
+        #print available_version_list_with_id_val
     list_of_avail_id = []
     for d in available_version_list_with_id_val:
         if '_id' in d:
@@ -77,10 +77,13 @@ def main():
     all_req_versions = []
     for version in all_required_versions:
         if version is not None:
-            """ removing the values that says None from the all_req_versions """
+            """
+
+            removing the values that says None from the all_req_versions
+
+            """
 
             all_req_versions.append(version)
-
 
     # print all_req_versions
     mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id, 2)
@@ -88,8 +91,11 @@ def main():
 
 
 def search_dictionaries(key, val, list_of_dictionaries):
-    """ This will take key ,value, list of dictionary's as arguments and returns the dictionary 
-        that contains them. 
+    """ 
+    
+    This will take key ,value, list of dictionary's as arguments and returns the dictionary
+        that contains them.
+    
     """
 
     for element in list_of_dictionaries:
@@ -98,7 +104,7 @@ def search_dictionaries(key, val, list_of_dictionaries):
 
 
 def mongo_version_manager(all_req_versions, available_version_list, req_start_node=2):
-    #versions_not_to_be_deleted = 0
+    # versions_not_to_be_deleted = 0
     all_versions_tree_list = []
     for each_version in all_req_versions:
         var1 = search_dictionaries('_id', each_version, available_version_list)
@@ -153,16 +159,16 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
     db.modulestore.structures.remove({'_id': {'$in': final_to_be_deleted_versions}})
 
 
-def mongo_version_linker(available_version_list_with_prev_original,list_of_avail_id):
+def mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id):
     for each in available_version_list_with_prev_original:
         if each["previous_version"] is None:
             print "Hi None"
         elif each["previous_version"] not in list_of_avail_id and each["previous_version"] is not None:
             to_be_linked_version_id = []
-            #b = []
+            # b = []
             original_version_id = []
             to_be_linked_version_id.append(each['_id'])
-            #b.append(each['previous_version'])
+            # b.append(each['previous_version'])
             original_version_id.append(each['original_version'])
             # print a
             # print b
