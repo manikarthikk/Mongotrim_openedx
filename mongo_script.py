@@ -12,9 +12,6 @@ db = client.edxapp
 def main():
     # Initializing the empty lists
     required_version_list = []
-    # versions_not_to_be_deleted = 0
-    available_version_list = []
-    # available_version_list_with_prev_original = []
     for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1,
                                                           "versions.library": 1, }):
         """
@@ -37,7 +34,7 @@ def main():
         elif u'draft-branch' not in value:
             value.update({u'draft-branch': None})
             value.update({u'published-branch': None})
-    
+    available_version_list = []
     for previous_version in db.modulestore.structures.find({}, {"previous_version": 1}):
         
         """ 
