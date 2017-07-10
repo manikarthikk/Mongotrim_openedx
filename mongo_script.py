@@ -170,7 +170,8 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
 def mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id):
     for each in available_version_list_with_prev_original:
         if each["previous_version"] is None:
-            print "Hi None"
+            #print "Hi None"
+            pass
         elif each["previous_version"] not in list_of_avail_id and each["previous_version"] is not None:
             to_be_linked_version_id = []
             # b = []
@@ -183,7 +184,8 @@ def mongo_version_linker(available_version_list_with_prev_original, list_of_avai
             # we are appending into the array and linking it, Since $in in mongo query is expecting list
             db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}},{'$set': {"previous_version": original_version_id[0]}})
         else:
-            print "Nothing to delete"
+            #print "Nothing to delete"
+            pass
 
 
 if __name__ == '__main__':
