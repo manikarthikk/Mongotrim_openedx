@@ -58,7 +58,6 @@ def main():
 
         """
         available_version_list_with_prev_original.append(previous_and_original_version)
-        # print j
 
     for _id in db.modulestore.structures.find({}, {"_id": 1}):
         available_version_list_with_id_val.append(_id)
@@ -117,7 +116,6 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
     all_versions_tree_list = []
     for each_version in all_req_versions:
         var1 = search_dictionaries('_id', each_version, available_version_list)
-        i = 0
         version_tree = []
         #print var1
         if var1 is not None:
@@ -126,7 +124,6 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
                 if var1 is None:
                     break
                 version_tree.append(var1)
-                i += 1
             all_versions_tree_list.append(version_tree)
     print all_versions_tree_list
     # req_sub_tree = []
@@ -134,9 +131,11 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
     middle_nodes = []
     tail_nodes = []
     for each_tree in all_versions_tree_list:
+        
         req_sub_tree = []
         for item in each_tree:
             req_sub_tree.append(item['_id'])
+            
         if len(req_sub_tree) > req_node_size:
             # This will extract the first n version id's from the version_tree
             head_nodes.append(req_sub_tree[0])
