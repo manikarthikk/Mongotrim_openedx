@@ -4,7 +4,9 @@ client = MongoClient()
 # Use Mongo Db URI Format MongoClient('mongodb://localhost:27017/'), empty for localhost
 
 db = client.edxapp
-#accessing the edxapp db
+
+
+# accessing the edxapp db
 
 
 def main():
@@ -36,7 +38,13 @@ def main():
             value.update({u'draft-branch': None})
             value.update({u'published-branch': None})
     for previous_version in db.modulestore.structures.find({}, {"previous_version": 1}):
-        """ This will give the list of Dictionary's with _id and previous_version """
+        
+        """ 
+        
+        This will give the list of Dictionary's with _id and previous_version 
+        
+        """
+        
         available_version_list.append(previous_version)
     available_version_list_with_prev_original = []
 
@@ -54,7 +62,7 @@ def main():
     for _id in db.modulestore.structures.find({}, {"_id": 1}):
         available_version_list_with_id_val.append(_id)
 
-        #print available_version_list_with_id_val
+        # print available_version_list_with_id_val
     list_of_avail_id = []
     for d in available_version_list_with_id_val:
         if '_id' in d:
@@ -92,10 +100,10 @@ def main():
 
 def search_dictionaries(key, val, list_of_dictionaries):
     """ 
-    
+
     This will take key ,value, list of dictionary's as arguments and returns the dictionary
         that contains them.
-    
+
     """
 
     for element in list_of_dictionaries:
@@ -177,7 +185,7 @@ def mongo_version_linker(available_version_list_with_prev_original, list_of_avai
             db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}},
                                              {'$set': {"previous_version": original_version_id[0]}})
         else:
-            print "*"
+            print "Nothing to delete"
 
 
 if __name__ == '__main__':
