@@ -44,9 +44,8 @@ def main():
         """
         
         available_version_list.append(previous_version)
+    
     available_version_list_with_prev_original = []
-
-    available_version_list_with_id_val = []
     for previous_and_original_version in db.modulestore.structures.find({},
                                                                         {"previous_version": 1, "original_version": 1}):
         """
@@ -56,6 +55,7 @@ def main():
         """
         available_version_list_with_prev_original.append(previous_and_original_version)
 
+    available_version_list_with_id_val = []
     for _id in db.modulestore.structures.find({}, {"_id": 1}):
         available_version_list_with_id_val.append(_id)
 
