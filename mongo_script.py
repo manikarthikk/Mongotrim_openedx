@@ -126,8 +126,8 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
                     break
                 version_tree.append(var1)
             all_versions_tree_list.append(version_tree)
-    print all_versions_tree_list
-    # req_sub_tree = []
+    #print all_versions_tree_list
+    
     head_nodes = []
     middle_nodes = []
     tail_nodes = []
