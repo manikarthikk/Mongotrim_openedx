@@ -141,11 +141,11 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
             # This will extract the first n version id's from the version_tree
             head_nodes.append(req_sub_tree[:2])
             # This will extract the last n version id's from the version_tree
-            middle_nodes.append(req_sub_tree[-1])
+            tail_nodes.append(req_sub_tree[-1])
             # This will extract the mid range of n t0 n+1 version id's from the version_tree
-            tail_nodes.append(req_sub_tree[2:-1])
+            middle_nodes.append(req_sub_tree[2:-1])
     versions_not_to_be_deleted = [val for sub_list in head_nodes for val in
-                                  sub_list] + middle_nodes + all_req_versions + head_nodes
+                                  sub_list] + tail_nodes + all_req_versions + head_nodes
     #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
     for each in versions_not_to_be_deleted:
@@ -154,7 +154,7 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
             versions_not_to_be_deleted_2.append(each)
 
     versions_tobe_deleted = []
-    for sub_list in tail_nodes:
+    for sub_list in middle_nodes:
         for val in sub_list:
             versions_tobe_deleted.append(val)
     # print versions_tobe_deleted
