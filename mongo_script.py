@@ -96,7 +96,7 @@ def main():
 
     # print all_req_versions
     #mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
-    mongo_version_manager(all_req_versions, available_version_list,2)
+    mongo_version_manager(all_req_versions, available_version_list,2,2)
     mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
 
 def search_dictionaries(key, val, list_of_dictionaries):
@@ -112,7 +112,7 @@ def search_dictionaries(key, val, list_of_dictionaries):
             return element
 
 
-def mongo_version_manager(all_req_versions, available_version_list, req_node_size=2):
+def mongo_version_manager(all_req_versions, available_version_list, req_node_size=2,req_node_length=2):
     # versions_not_to_be_deleted = 0
     all_versions_tree_list = []
     for each_version in all_req_versions:
@@ -144,7 +144,7 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
             # This will extract the last n version id's from the version_tree
             tail_nodes.append(req_sub_tree[-1])
             # This will extract the mid range of n t0 n+1 version id's from the version_tree
-            middle_nodes.append(req_sub_tree[2:-1])
+            middle_nodes.append(req_sub_tree[req_node_length:-1])
     versions_not_to_be_deleted = tail_nodes + all_req_versions + head_nodes
     #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
