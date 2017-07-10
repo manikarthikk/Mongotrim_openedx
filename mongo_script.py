@@ -37,6 +37,7 @@ def main():
         elif u'draft-branch' not in value:
             value.update({u'draft-branch': None})
             value.update({u'published-branch': None})
+    
     for previous_version in db.modulestore.structures.find({}, {"previous_version": 1}):
         
         """ 
