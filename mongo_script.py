@@ -63,18 +63,22 @@ def main():
         available_version_list_with_id_val.append(_id)
 
         # print available_version_list_with_id_val
+    
     list_of_avail_id = []
     for d in available_version_list_with_id_val:
         if '_id' in d:
             list_of_avail_id.append(d['_id'])
+    
     draft_branch_version = []
     for version_dict in versions:
         # Extracting all draft branch versions
         draft_branch_version.append(version_dict['draft-branch'])
+    
     published_branch_version = []
     for version_dict in versions:
         # Extracting all published-branch versions
         published_branch_version.append(version_dict['published-branch'])
+    
     library_branch_version = []
     for version_dict in versions:
         # Extracting all library versions
