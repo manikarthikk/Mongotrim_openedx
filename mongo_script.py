@@ -12,9 +12,6 @@ db = client.edxapp
 def main():
     # Initializing the empty lists
     required_version_list = []
-    # versions_not_to_be_deleted = 0
-    available_version_list = []
-    # available_version_list_with_prev_original = []
     for value in db.modulestore.active_versions.find({}, {"versions.draft-branch": 1, "versions.published-branch": 1,
                                                           "versions.library": 1, }):
         """
@@ -37,7 +34,7 @@ def main():
         elif u'draft-branch' not in value:
             value.update({u'draft-branch': None})
             value.update({u'published-branch': None})
-    
+    available_version_list = []
     for previous_version in db.modulestore.structures.find({}, {"previous_version": 1}):
         
         """ 
@@ -47,9 +44,8 @@ def main():
         """
         
         available_version_list.append(previous_version)
+    
     available_version_list_with_prev_original = []
-
-    available_version_list_with_id_val = []
     for previous_and_original_version in db.modulestore.structures.find({},
                                                                         {"previous_version": 1, "original_version": 1}):
         """
@@ -58,24 +54,28 @@ def main():
 
         """
         available_version_list_with_prev_original.append(previous_and_original_version)
-        # print j
 
+    available_version_list_with_id_val = []
     for _id in db.modulestore.structures.find({}, {"_id": 1}):
         available_version_list_with_id_val.append(_id)
 
         # print available_version_list_with_id_val
+    
     list_of_avail_id = []
     for d in available_version_list_with_id_val:
         if '_id' in d:
             list_of_avail_id.append(d['_id'])
+    
     draft_branch_version = []
     for version_dict in versions:
         # Extracting all draft branch versions
         draft_branch_version.append(version_dict['draft-branch'])
+    
     published_branch_version = []
     for version_dict in versions:
         # Extracting all published-branch versions
         published_branch_version.append(version_dict['published-branch'])
+    
     library_branch_version = []
     for version_dict in versions:
         # Extracting all library versions
@@ -96,7 +96,7 @@ def main():
 
     # print all_req_versions
     #mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
-    mongo_version_manager(all_req_versions, available_version_list,2,2)
+    mongo_version_manager(all_req_versions, available_version_list,2)
     mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
 
 def search_dictionaries(key, val, list_of_dictionaries):
@@ -112,12 +112,11 @@ def search_dictionaries(key, val, list_of_dictionaries):
             return element
 
 
-def mongo_version_manager(all_req_versions, available_version_list, req_start_node=2,required_head_nodes=2):
+def mongo_version_manager(all_req_versions, available_version_list, req_node_size=2):
     # versions_not_to_be_deleted = 0
     all_versions_tree_list = []
     for each_version in all_req_versions:
         var1 = search_dictionaries('_id', each_version, available_version_list)
-        i = 0
         version_tree = []
         #print var1
         if var1 is not None:
@@ -126,26 +125,27 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
                 if var1 is None:
                     break
                 version_tree.append(var1)
-                i += 1
             all_versions_tree_list.append(version_tree)
-    print all_versions_tree_list
-    # req_sub_tree = []
+    #print all_versions_tree_list
+    
     head_nodes = []
     middle_nodes = []
     tail_nodes = []
     for each_tree in all_versions_tree_list:
+        
         req_sub_tree = []
         for item in each_tree:
             req_sub_tree.append(item['_id'])
-        if len(req_sub_tree) > req_start_node:
+            
+        if len(req_sub_tree) > req_node_size:
             # This will extract the first n version id's from the version_tree
-            head_nodes.append(req_sub_tree[:2])
+            head_nodes.append(req_sub_tree[0])
+            head_nodes.append(req_sub_tree[1])
             # This will extract the last n version id's from the version_tree
             tail_nodes.append(req_sub_tree[-1])
             # This will extract the mid range of n t0 n+1 version id's from the version_tree
-            middle_nodes.append(req_sub_tree[required_head_nodes:-1])
-    versions_not_to_be_deleted = [val for sub_list in head_nodes for val in
-                                  sub_list] + tail_nodes + all_req_versions + head_nodes
+            middle_nodes.append(req_sub_tree[2:-1])
+    versions_not_to_be_deleted = tail_nodes + all_req_versions + head_nodes
     #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
     for each in versions_not_to_be_deleted:
