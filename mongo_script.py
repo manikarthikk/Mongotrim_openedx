@@ -94,9 +94,9 @@ def main():
             all_req_versions.append(version)
 
     # print all_req_versions
-    mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id, 2)
-    mongo_version_manager(all_req_versions, available_version_list)
-
+    #mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
+    mongo_version_manager(all_req_versions, available_version_list,2)
+    mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
 
 def search_dictionaries(key, val, list_of_dictionaries):
     """ 
@@ -118,7 +118,7 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
         var1 = search_dictionaries('_id', each_version, available_version_list)
         i = 0
         version_tree = []
-        # print var1
+        #print var1
         if var1 is not None:
             while var1['previous_version'] is not None:
                 var1 = search_dictionaries('_id', var1['previous_version'], available_version_list)
@@ -145,7 +145,7 @@ def mongo_version_manager(all_req_versions, available_version_list, req_start_no
             tail_nodes.append(req_sub_tree[2:-1])
     versions_not_to_be_deleted = [val for sub_list in head_nodes for val in
                                   sub_list] + middle_nodes + all_req_versions + head_nodes
-    # print versions_not_to_be_deleted
+    #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
     for each in versions_not_to_be_deleted:
         # removing duplicated in versions_not_to_be_deleted list
@@ -178,12 +178,10 @@ def mongo_version_linker(available_version_list_with_prev_original, list_of_avai
             to_be_linked_version_id.append(each['_id'])
             # b.append(each['previous_version'])
             original_version_id.append(each['original_version'])
-            # print a
-            # print b
-            # print c
+            print to_be_linked_version_id
+            print original_version_id
             # we are appending into the array and linking it, Since $in in mongo query is expecting list
-            db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}},
-                                             {'$set': {"previous_version": original_version_id[0]}})
+            db.modulestore.structures.update({'_id': {'$in': to_be_linked_version_id}},{'$set': {"previous_version": original_version_id[0]}})
         else:
             print "Nothing to delete"
 
