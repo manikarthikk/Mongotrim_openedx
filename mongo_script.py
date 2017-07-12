@@ -44,8 +44,9 @@ def main():
         """
         
         available_version_list.append(previous_version)
-    
     available_version_list_with_prev_original = []
+
+    available_version_list_with_id_val = []
     for previous_and_original_version in db.modulestore.structures.find({},
                                                                         {"previous_version": 1, "original_version": 1}):
         """
@@ -55,7 +56,6 @@ def main():
         """
         available_version_list_with_prev_original.append(previous_and_original_version)
 
-    available_version_list_with_id_val = []
     for _id in db.modulestore.structures.find({}, {"_id": 1}):
         available_version_list_with_id_val.append(_id)
 
@@ -96,7 +96,7 @@ def main():
 
     # print all_req_versions
     #mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
-    mongo_version_manager(all_req_versions, available_version_list,2,2)
+    mongo_version_manager(all_req_versions, available_version_list,2)
     mongo_version_linker(available_version_list_with_prev_original, list_of_avail_id)
 
 def search_dictionaries(key, val, list_of_dictionaries):
@@ -112,7 +112,7 @@ def search_dictionaries(key, val, list_of_dictionaries):
             return element
 
 
-def mongo_version_manager(all_req_versions, available_version_list, req_node_size=2,req_node_length=2):
+def mongo_version_manager(all_req_versions, available_version_list, req_node_size=2):
     # versions_not_to_be_deleted = 0
     all_versions_tree_list = []
     for each_version in all_req_versions:
@@ -126,8 +126,8 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
                     break
                 version_tree.append(var1)
             all_versions_tree_list.append(version_tree)
-    #print all_versions_tree_list
-    
+    print all_versions_tree_list
+    # req_sub_tree = []
     head_nodes = []
     middle_nodes = []
     tail_nodes = []
@@ -144,7 +144,7 @@ def mongo_version_manager(all_req_versions, available_version_list, req_node_siz
             # This will extract the last n version id's from the version_tree
             tail_nodes.append(req_sub_tree[-1])
             # This will extract the mid range of n t0 n+1 version id's from the version_tree
-            middle_nodes.append(req_sub_tree[req_node_length:-1])
+            middle_nodes.append(req_sub_tree[2:-1])
     versions_not_to_be_deleted = tail_nodes + all_req_versions + head_nodes
     #print versions_not_to_be_deleted
     versions_not_to_be_deleted_2 = []
