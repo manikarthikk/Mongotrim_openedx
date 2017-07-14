@@ -23,3 +23,8 @@ Generate list of versions that should be deleted (targetB)
 Delete all items in targetB 
  
 find all items with disconnected from its original version and relink it.  
+# TODO 
+
+consider deleting the data in modulestore_versions for courses that are deleted/not available in modulestore_active_versions.
+
+consider deleting Chunks/files in mongo 
