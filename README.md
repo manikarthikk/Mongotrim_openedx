@@ -19,6 +19,7 @@ Iterate all items in targetA & build a “tree” of previous nodes (from struct
  
 
 Generate list of versions that should be deleted (targetB) 
+  
   o Split & filter each trees to find middle nodes 
   o “middle nodes” are those calculated as between the active version and original version in a “tree” that accounts for the 
 
